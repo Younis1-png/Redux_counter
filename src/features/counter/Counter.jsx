@@ -1,9 +1,19 @@
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { increment, decrement } from "./counterSlice";
+import { increment, decrement, reset, incrementByAmount } from "./counterSlice";
 
 const Counter = () => {
+  const [incrementAmount, setIncrementAmount] = useState(0);
   const count = useSelector((state) => state.counter.count);
   const dispatch = useDispatch();
+
+  // Make sure we get a number value or set it to 0
+  const addValue = Number(incrementAmount) || 0;
+
+  const resetAll = () => {
+    setIncrementAmount(0);
+    dispatch(reset());
+  };
 
   return (
     <section>
@@ -11,6 +21,19 @@ const Counter = () => {
       <div>
         <button onClick={() => dispatch(increment())}>+</button>
         <button onClick={() => dispatch(decrement())}>-</button>
+      </div>
+
+      <input
+        type="text"
+        value={incrementAmount}
+        onChange={(e) => setIncrementAmount(e.target.value)}
+      />
+
+      <div>
+        <button onClick={() => dispatch(incrementByAmount(addValue))}>
+          Add amount
+        </button>
+        <button onClick={() => dispatch(reset())}>Reset</button>
       </div>
     </section>
   );
